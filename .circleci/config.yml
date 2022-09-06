@@ -104,9 +104,11 @@ jobs:
       - run:
           name: Build front-end
           command: |
-             cd frontend
-             npm install
-             npm audit --audit-level=critical
+              cd frontend
+              npm install oauth-sign@^0.9.0
+              npm audit fix --audit-level=critical --force
+              npm audit fix --force
+              npm audit --audit-level=critical 
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
@@ -121,9 +123,11 @@ jobs:
       - run:
           name: Build back-end
           command: |
-             cd backend
-             npm install
-             npm audit --audit-level=critical
+              cd backend 
+              npm install oauth-sign@^0.9.0
+              npm audit fix --audit-level=critical --force
+              npm audit fix --force
+              npm audit --audit-level=critical 
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
