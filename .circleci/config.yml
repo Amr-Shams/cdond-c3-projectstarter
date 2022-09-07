@@ -169,23 +169,31 @@ jobs:
       - destroy-environment      
 
   configure-infrastructure:
-    docker:
-     - image: python:3.7-alpine3.11 
-    steps:
-      # Checkout code from git
-      # Add ssh keys with fingerprint
-      # attach workspace
-      - run:
-          name: Install dependencies
-          command: |
-            # Your code here
-            
-      - run:
-          name: Configure server
-          command: |
-            # Your code here
-            
-      - destroy-environment     
+      docker:
+        - image: python:3.7-alpine3.11 
+      steps:
+        - checkout
+        - add_ssh_keys:
+            fingerprints: ["08:c2:8f:a6:7f:2d:eb:f5:86:f8:75:2b:f2:15:0d:d3"] 
+        - run:
+            name: Install dependencies needed
+            command: |
+              apk add python curl
+              curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+              unzip awscli-bundle.zip
+              ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+              apk add --update ansible 
+        - attach_workspace:
+            at: ~/
+        - run:
+            name: Configure server
+            command: |
+              echo "Current Working Directory: "
+              pwd 
+              #cd .circleci/ansible
+              ansible-playbook -i ~/hosts.txt .circleci/ansible/configure-server.yml
+              #ansible localhost -m shell -a pwd    # for test purposes 
+        - destroy-environment   
 
   run-migrations:
     docker:
