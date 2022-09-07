@@ -202,7 +202,7 @@ jobs:
           command: |
             # Your code here
             
-     - destroy-environment      
+      - destroy-environment      
 
   deploy-frontend:
     docker:
