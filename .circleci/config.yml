@@ -11,9 +11,9 @@ commands:
           when: on_fail
           command: |
               echo "Destroying environment:${CIRCLE_WORKFLOW_ID:0:7}"
-              aws --profile amrshams cloudformation delete-stack --stack-name updapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
-              aws --profile amrshams cloudformation delete-stack --stack-name updapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
-              aws --profile amrshams s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+              aws cloudformation delete-stack --stack-name updapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
+              aws cloudformation delete-stack --stack-name updapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
+              aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
             
 
   revert-migrations:
@@ -144,7 +144,7 @@ jobs:
           name: Ensure back-end infrastructure exists
           command: |
            yum -y install gzip tar 
-           aws  --profile amrshams cloudformation deploy \
+           aws cloudformation deploy \
              --template-file ./.circleci/files/backend.yml \
              --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
