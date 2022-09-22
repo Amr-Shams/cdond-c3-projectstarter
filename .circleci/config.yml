@@ -225,12 +225,6 @@
                echo "successfully migrated and sent to kvdb"
                curl https://kvdb.io/TYGb1rH7UtyrAmMMurXT4F/migration_$ {CIRCLE_WORKFLOW_ID:0:7} -d '1'
               fi
-      - restore_cache:
-          keys: [backend-build]
-      - attach_workspace:
-          at: ~/
-      - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}  
         - destroy-environment
         - revert-migrations
 
